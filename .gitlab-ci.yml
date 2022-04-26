@@ -1,0 +1,48 @@
+stages:
+  - pull
+  - build
+  - push
+  - cleanup
+  - deploy
+
+before_script:
+  - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" "$CI_REGISTRY"
+
+pull:
+  stage: pull
+  allow_failure: true
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE"
+
+build:
+  stage: build
+  script:
+    - docker build --tag="$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME" --cache-from="$CI_REGISTRY_IMAGE":latest .
+
+push latest:
+  stage: push
+  script:
+    - docker tag "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"  "$CI_REGISTRY_IMAGE":latest
+    - docker push "$CI_REGISTRY_IMAGE":latest
+
+push main:
+  stage: push
+  only:
+    - main
+  script:
+    - docker tag "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"  "$CI_REGISTRY_IMAGE":main
+    - docker push "$CI_REGISTRY_IMAGE":main
+
+cleanup:
+  stage: cleanup
+  when: always
+  script:
+    - docker rmi -f "$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME"
+    - docker system prune -f
+
+deploy:
+  stage: deploy
+  when: manual
+  script:
+    - docker-compose -f docker-compose.deploy.yml  down
+    - docker-compose -f docker-compose.deploy.yml  up -d

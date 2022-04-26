@@ -1,0 +1,12 @@
+.git/
+frontend/.git/
+.gitignore
+/frontend/.gitignore
+.next/                # Existing Next.js builds
+frontend/.next/
+.dockerignore
+Dockerfile
+docker-compose.yml
+node_modules/         # Installed inside container
+frontend/node_modules/
+nginx/                # We'll create this directory soon

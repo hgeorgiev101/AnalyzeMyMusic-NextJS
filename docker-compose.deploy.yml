@@ -1,0 +1,13 @@
+version: "3"
+services:
+  nextjs:
+    image: registry.gitlab.propulsion-home.ch/full-stack/batch-17-aug-2021/final-projects/analyzemymusic-nextjs:main
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    command: nginx -g "daemon off;"

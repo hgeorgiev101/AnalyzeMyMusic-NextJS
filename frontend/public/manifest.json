@@ -1,0 +1,16 @@
+{
+  "name": "Analyze My Music",
+  "short_name": "AnalyzeMyMusic",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ffc40d",
+  "background_color": "#ffc40d",
+  "icons": [
+    {
+      "src": "icons/analyzemymusic-logo.png",
+      "sizes": "200x93",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
